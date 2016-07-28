@@ -61,7 +61,9 @@ netmask 255.0.0.0
 - Finally, power off the machine, and export it; this is the base machine
 
 You should now be able to run the example.yml playbook from this directory: 
+```
 ansible-playbook -i hosts main.yml --extra-vars="target=example pubkey=/??/id_rsa.pub"
+```
 
 * Replace ?? with the path to your pubkey
 * The above has been tested with Ansible 2.1 and VirtualBox 5.1.2
