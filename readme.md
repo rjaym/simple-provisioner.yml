@@ -47,7 +47,7 @@ With the above, the process of provisioning a new machine turns into:
   uses the host-only network you created above (this will be eth1)
 - Download and install Ubuntu server into a VirtualBox VM
 	- Use username "base", password "base"
-	- Install OpenSSH
+	- Install OpenSSH-server
 - sudo vi /etc/network/interfaces
 
 ```
