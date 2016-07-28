@@ -5,7 +5,7 @@ Using base.yml
 ## Motivation
 
 I want to use ansible-playbook on a host that is specified in a hosts file, but 
-doesn't yet physically exist.
+has yet to be provisioned.
 
 
 ## Goals
