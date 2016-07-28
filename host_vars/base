@@ -1,0 +1,7 @@
+---
+ansible_user: base 
+ansible_host: 10.254.254.254 
+ansible_ssh_pass: base 
+ansible_become_pass: base 
+ansible_become: true 
+ansible_port: 22

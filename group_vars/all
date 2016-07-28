@@ -1,0 +1,6 @@
+---
+
+ansible_user : example_user
+ansible_become_pass : example_pass
+ansible_become : true
+ansible_port : 7777

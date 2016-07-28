@@ -1,0 +1,54 @@
+
+# The MIT License (MIT)
+# Copyright (c) 2016 Jay Melo
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+- name: setup the base machine
+  hosts: base
+  gather_facts: no
+  tasks:
+    # by default, an ubuntu user is part of a group of their own name
+  - name: add target user's group
+    group:
+      name="{{hostvars[target].ansible_user}}"
+      state=present
+
+    # just using the groups I see for the default user created during the ubuntu installation
+  - name: add a user matching the target's
+    user:
+      name="{{hostvars[target].ansible_user}}"
+      password="{{hostvars[target].ansible_become_pass|password_hash('sha512')}}"
+      groups="{{hostvars[target].ansible_user}},adm,cdrom,sudo,dip,plugdev,lpadmin,sambashare"
+
+  - name: add the pubkey provided via extra-vars
+    authorized_key:
+      user="{{hostvars[target].ansible_user}}" key="{{lookup('file', pubkey)}}"
+
+    # to my surprise, the full line is needed, perhaps there's a better module/option
+  - name: change eth1's IP address to match the target
+    lineinfile:
+      dest=/etc/network/interfaces
+      regexp='address 10\.254\.254\.254'
+      line="address {{hostvars[target].ansible_host}}"
+
+  - name: change the sshd port to match the target
+    lineinfile:
+      dest=/etc/ssh/sshd_config
+      regexp='Port 22'
+      line="Port {{hostvars[target].ansible_port}}"
+
+  - name: disable sshd password logins
+    lineinfile: 
+      dest=/etc/ssh/sshd_config
+      regexp='#PasswordAuthentication yes'
+      line='PasswordAuthentication no'
+
+    # critical: it's best to have the following commands run together via &&
+  - name: reset eth1, restart sshd and magically continue this playbook
+    command: bash -c "sleep 1 && ifdown eth1 && ifup eth1 && service ssh restart"
+    async: 5 # also critical, see below, reduce the number of seconds if you like
+
+  # http://docs.ansible.com/ansible/playbooks_async.html
+
