@@ -4,8 +4,8 @@ Using base.yml
 
 ## Motivation
 
-More specifically, I want to use ansible-playbook on a host that is specified in
-a hosts file, but doesn't yet physically exist.
+I want to use ansible-playbook on a host that is specified in a hosts file, but 
+doesn't yet physically exist.
 
 
 ## Goals
