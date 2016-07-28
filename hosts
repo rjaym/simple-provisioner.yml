@@ -1,0 +1,11 @@
+
+
+# filled out via ./group_vars/all
+example ansible_host=10.253.253.253
+example_2 ansible_host=10.2.3.4
+
+
+# a reference to the actual base machine is required in the hosts file
+# filled out via ./host_vars/base
+base
+
