@@ -1,5 +1,5 @@
 
-Using base.yml
+Using simple-provisioner.yml
 ==============
 
 ## Motivation
