@@ -1,6 +1,6 @@
 
 # This is example usage of base.yml
-- include: base.yml
+- include: simple-provisioner.yml
   when: pubkey is defined
   # from here, you can build out your playbook as normal
 
