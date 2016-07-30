@@ -4,9 +4,7 @@ Using simple-provisioner.yml
 
 ## Motivation
 
-I want to use ansible-playbook on a host that is specified in a hosts file, but 
-has yet to be provisioned.
-
+I want to provision/configure new hosts using hosts file details alone, and magically continue my playbook.
 
 ## Goals
 
